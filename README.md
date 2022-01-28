@@ -1,0 +1,1 @@
+# hoja_1_mineria
