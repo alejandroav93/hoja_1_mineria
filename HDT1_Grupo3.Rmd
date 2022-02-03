@@ -6,8 +6,11 @@ output: html_document
 ---
 Se importa la libreria "dplyr" y "ggplot2" para realizar operaciones, modificaciones al set de datos y gráfico de los resultados, respectivamente.
 ```{r}
+library("tidyverse")
 library("dplyr")
 library("ggplot2")
+library("httr")
+library("readr")
 ```
 
 ```{r setup, include=FALSE}
@@ -44,6 +47,38 @@ PREGUNTA #4.2
 Se filtra con la librería dplyr el set de datos y se obtienen las 10 películas con mayor recaudación
 ```{r}
 revenue <- arrange(peliculas, desc(peliculas$revenue))
-head (select(revenue, "originalTitle"),10)
+head (select(revenue, "originalTitle", "revenue"),10)
+```
+
+PREGUNTA #4.5
+¿Cuántas películas se hicieron en cada año? 
+```{r}
+# Format date conversion from "%Y-%m-%d" to POSIX %Y%
+peliculas$releaseYear <- as.POSIXct(peliculas$releaseDate, format ="%Y-%m-%d")
+peliculas$releaseYear <-format(peliculas$releaseYear, format = "%Y")
+
+# Format date column to integer for further study
+peliculas$releaseYear <-as.integer(peliculas$releaseYear, format ="%Y")
+
+# Create Histogram for Launch year vs. Quantity
+#hist(peliculas$releaseYear, xlab = "Año de Lanzamiento", ylab="Cantidad",col="yellow",border="blue", xlim =c(1902,2022), ylim =c(0,1200), breaks = 50)
+
+# Group Movies by year and count incidences per year
+yearly <- peliculas %>% group_by(peliculas$releaseYear) %>% summarise(freq=n()) %>% ungroup()
+print(as_tibble(yearly), n = 120)
+
+
+
+```
+
+¿En qué año se hicieron más películas?
+```{r}
+# Get year with most movies produced
+yearly %>% slice_max(freq)
+```
+
+Haga un gráfico de barras
+```{r}
+ggplot(yearly, aes(x=`peliculas$releaseYear`, y= freq, fill= freq)) + geom_col(position ="dodge")
 ```
 
