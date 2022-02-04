@@ -60,9 +60,6 @@ peliculas$releaseYear <-format(peliculas$releaseYear, format = "%Y")
 # Format date column to integer for further study
 peliculas$releaseYear <-as.integer(peliculas$releaseYear, format ="%Y")
 
-# Create Histogram for Launch year vs. Quantity
-#hist(peliculas$releaseYear, xlab = "Año de Lanzamiento", ylab="Cantidad",col="yellow",border="blue", xlim =c(1902,2022), ylim =c(0,1200), breaks = 50)
-
 # Group Movies by year and count incidences per year
 yearly <- peliculas %>% group_by(peliculas$releaseYear) %>% summarise(freq=n()) %>% ungroup()
 print(as_tibble(yearly), n = 120)
@@ -82,28 +79,43 @@ Haga un gráfico de barras
 ggplot(yearly, aes(x=`peliculas$releaseYear`, y= freq, fill= freq)) + geom_col(position ="dodge")
 ```
 
+PREGUNTA #4.8
+¿La cantidad de actores influye en los ingresos de las películas?¿Se han hecho películas con más actores en los últimos años?
+```{r}
+
+```
+
 PREGUNTA #4.11
 ¿Cómo se correlacionan los presupuestos con los ingresos? ¿Los altos presupuestos significan altos ingresos? Haga los gráficos que necesite, histograma, diagrama de dispersión
 ```{r}
 x <- peliculas$budget
 y <- peliculas$revenue
 # Plot with main and axis titles
-# Change point shape (pch = 19) and remove frame.
+# Change point shape (pch = 21) and remove frame.
 plot(x, y, main = "Presupuesto vs Ingresos",
      xlab = "Prespuesto", ylab = "Ingresos",
      pch = 21, frame = FALSE)
-abline(lm(y ~ x, data = mtcars), col = "red")
+abline(lm(y ~ x, data = peliculas), col = "red")
 correlation <- data.frame(budget=c(peliculas$budget), revenue=c(peliculas$revenue))
 #fit regression model
 correlation2 <- lm(budget~revenue, data=peliculas)
 summary(correlation2)
-
-
 ```
 
 PREGUNTA #4.14
 ¿Cómo se correlacionan las calificaciones con el éxito comercial?
 ```{r}
-
+x1 <- peliculas$popularity
+y1 <- peliculas$revenue
+# Plot with main and axis titles
+# Change point shape (pch = 21) and remove frame.
+plot(x1, y1, main = "Popularidad vs Ingresos",
+     xlab = "Popularidad", ylab = "Ingresos",
+     pch = 21, frame = FALSE)
+abline(lm(y1 ~ x1, data = peliculas), col = "red")
+correlation3 <- data.frame(budget=c(peliculas$popularity ), revenue=c(peliculas$revenue))
+#fit regression model
+correlation4 <- lm(popularity~revenue, data=peliculas)
+summary(correlation4)
 ```
 
