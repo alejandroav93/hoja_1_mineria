@@ -82,7 +82,21 @@ ggplot(yearly, aes(x=`peliculas$releaseYear`, y= freq, fill= freq)) + geom_col(p
 PREGUNTA #4.8
 ¿La cantidad de actores influye en los ingresos de las películas?¿Se han hecho películas con más actores en los últimos años?
 ```{r}
+x0 <- peliculas$actorsAmount
+y0 <- peliculas$revenue
+# Plot with main and axis titles
+# Change point shape (pch = 21) and remove frame.
+plot(x0, y0, main = " Cantidad de actores vs Ingresos",
+     xlab = "Cantidad de actores", ylab = "Ingresos",
+     pch = 21, frame = FALSE)
+abline(lm(y0 ~ x0, data = peliculas), col = "red")
+correlation5 <- data.frame(budget=c(peliculas$actorsAmount), revenue=c(peliculas$revenue))
+#fit regression model
+correlation6 <- lm(actorsAmount~revenue, data=peliculas)
+summary(correlation6)
 
+actors <- arrange(peliculas, desc(peliculas$actorsAmount))
+head (select(actors, "releaseYear", "actorsAmount"),40)
 ```
 
 PREGUNTA #4.11
